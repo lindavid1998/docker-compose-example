@@ -9,7 +9,8 @@ function App() {
       const response = await fetch('http://localhost:3000');
       const data = await response.json()
       if (response.ok) {
-        setMessage(`${data.year}: ${data.brand} ${data.model}`);
+        setMessage(data.message)
+        // setMessage(`${data.year}: ${data.brand} ${data.model}`);
       } else {
         setMessage(data.error);
       }
