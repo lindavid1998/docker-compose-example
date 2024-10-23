@@ -10,6 +10,24 @@ services:
     build: ./server
     ports:
       - "3000:3000"
+    # depends_on:
+    #   db:
+    #     condition: service_healthy
     volumes:
       - ./server:/app
       - /app/node_modules
+  db:
+    image: "postgres:17-alpine"
+    ports:
+      - "5432:5432"
+    volumes:
+      - my_db_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: password
+      # POSTGRES_DB: docker
+      # POSTGRES_USER: postgres
+    # secrets:
+
+volumes:
+  my_db_data:
+    external: true
