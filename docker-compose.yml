@@ -10,9 +10,15 @@ services:
     build: ./server
     ports:
       - "3000:3000"
-    # depends_on:
-    #   db:
-    #     condition: service_healthy
+    depends_on:
+      - db
+    env_file: ./.env # can specify diff env files
+    environment:
+      DB_HOST: $DB_HOST
+      DB_USER: $DB_USER
+      DB_PASSWORD: $DB_PASSWORD
+      DB_NAME: $DB_NAME
+      DB_PORT: $DB_PORT
     volumes:
       - ./server:/app
       - /app/node_modules
@@ -22,8 +28,9 @@ services:
       - "5432:5432"
     volumes:
       - my_db_data:/var/lib/postgresql/data
+    env_file: ./.env
     environment:
-      POSTGRES_PASSWORD: password
+      POSTGRES_PASSWORD: $DB_PASSWORD
       # POSTGRES_DB: docker
       # POSTGRES_USER: postgres
     # secrets:
