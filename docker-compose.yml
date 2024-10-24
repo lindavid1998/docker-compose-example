@@ -13,10 +13,13 @@ services:
     depends_on:
       - db
     env_file: ./.env # can specify diff env files
+    secrets:
+      - db_password
     environment:
       DB_HOST: $DB_HOST
       DB_USER: $DB_USER
-      DB_PASSWORD: $DB_PASSWORD
+      # DB_PASSWORD: $DB_PASSWORD
+      DB_PASSWORD_FILE: /run/secrets/db_password
       DB_NAME: $DB_NAME
       DB_PORT: $DB_PORT
     volumes:
@@ -28,9 +31,11 @@ services:
       - "5432:5432"
     volumes:
       - my_db_data:/var/lib/postgresql/data
+    secrets:
+      - db_password
     env_file: ./.env
     environment:
-      POSTGRES_PASSWORD: $DB_PASSWORD
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
       # POSTGRES_DB: docker
       # POSTGRES_USER: postgres
     # secrets:
@@ -38,3 +43,7 @@ services:
 volumes:
   my_db_data:
     external: true
+
+secrets:
+  db_password:
+    file: ./db_password.txt

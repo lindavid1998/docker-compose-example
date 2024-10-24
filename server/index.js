@@ -4,8 +4,10 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const pgp = require('pg-promise')(/* options */);
+const fs = require('fs');
+const db_pw = fs.readFileSync(process.env.DB_PASSWORD_FILE, 'utf-8') 
 const db = pgp(
-	`postgres://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`
+	`postgres://${process.env.DB_USER}:${db_pw}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`
 );
 
 const PORT = process.env.PORT || 3000;
@@ -17,7 +19,6 @@ app.get('/', async (req, res) => {
 	try {
 		const data = await db.one('SELECT * FROM cars');
     res.json(data)
-    // res.json({ message: 'hello from express'})
 	} catch (error) {
 		res.json({ error });
 	}
